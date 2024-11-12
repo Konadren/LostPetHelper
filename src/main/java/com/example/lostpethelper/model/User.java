@@ -1,4 +1,4 @@
-package com.example.lostpethelper.models;
+package com.example.lostpethelper.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
