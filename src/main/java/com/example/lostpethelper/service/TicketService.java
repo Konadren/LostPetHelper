@@ -1,31 +1,16 @@
 package com.example.lostpethelper.service;
 
-import com.example.lostpethelper.model.Ticket;
-import com.example.lostpethelper.repository.TicketRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.lostpethelper.dto.TicketDTO;
+import java.util.List;
 
-import java.util.Optional;
+public interface TicketService {
+    List<TicketDTO> findAllTickets();
 
-@Service
-public class TicketService {
-    private final TicketRepository ticketRepository;
+    TicketDTO findTicketById(Integer id);
 
-    @Autowired
-    public TicketService(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
-    }
+    TicketDTO createTicket(TicketDTO ticket);
 
-    public Ticket saveTicket(Ticket ticket) {
-        return ticketRepository.save(ticket);
-    }
+    TicketDTO updateTicketById(Integer id, TicketDTO updatedTicket);
 
-    public void deleteTicketById(int id) {
-        ticketRepository.deleteById(id);
-    }
-
-    public Optional<Ticket> getTicketById(int id) {
-        return ticketRepository.findById(id);
-    }
-
+    void deleteTicketById(Integer id);
 }

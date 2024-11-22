@@ -3,4 +3,6 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/LostPetHelperDB
     username: postgres
-    password: "RetardedOne1337"
+    password: "240919"
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect

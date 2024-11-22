@@ -16,6 +16,7 @@ public class Response {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "response_id")
     private Integer responseID;
 
     @Column(name = "message")
