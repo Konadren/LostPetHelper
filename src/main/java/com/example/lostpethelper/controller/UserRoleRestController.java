@@ -2,6 +2,7 @@ package com.example.lostpethelper.controller;
 
 import com.example.lostpethelper.dto.UserRoleDTO;
 import com.example.lostpethelper.service.UserRoleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +34,13 @@ public class UserRoleRestController {
     }
 
     @PostMapping
-    public ResponseEntity<UserRoleDTO> createUserRole(@RequestBody UserRoleDTO userRoleDTO) {
+    public ResponseEntity<UserRoleDTO> createUserRole(@Valid @RequestBody UserRoleDTO userRoleDTO) {
         UserRoleDTO createdUser = userRoleService.createUserRole(userRoleDTO);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserRoleDTO> updateUserRoleById(@PathVariable Integer id, @RequestBody UserRoleDTO userRoleDTO){
+    public ResponseEntity<UserRoleDTO> updateUserRoleById(@PathVariable Integer id,@Valid @RequestBody UserRoleDTO userRoleDTO){
         UserRoleDTO updatedUserRoleDTO = userRoleService.updateUserRoleById(id, userRoleDTO);
         return new ResponseEntity<>(updatedUserRoleDTO, HttpStatus.NO_CONTENT);
     }

@@ -2,6 +2,7 @@ package com.example.lostpethelper.controller;
 
 import com.example.lostpethelper.dto.ResponseDTO;
 import com.example.lostpethelper.service.ResponseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/responses")
+@RequestMapping("api/responses")
 public class ResponseRestController {
 
     private final ResponseService responseService;
@@ -34,13 +35,13 @@ public class ResponseRestController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> createResponse(@RequestBody ResponseDTO responseDTO) {
+    public ResponseEntity<ResponseDTO> createResponse(@Valid @RequestBody ResponseDTO responseDTO) {
         ResponseDTO createdResponse = responseService.createResponse(responseDTO);
         return new ResponseEntity<>(createdResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseDTO> updateResponseById(@PathVariable Integer id, @RequestBody ResponseDTO responseDTO) {
+    public ResponseEntity<ResponseDTO> updateResponseById(@PathVariable Integer id, @Valid @RequestBody ResponseDTO responseDTO) {
         ResponseDTO updatedResponseDTO = responseService.updateResponseById(id, responseDTO);
         return new ResponseEntity<>(updatedResponseDTO, HttpStatus.NO_CONTENT);
     }

@@ -2,6 +2,7 @@ package com.example.lostpethelper.controller;
 
 import com.example.lostpethelper.dto.UserDTO;
 import com.example.lostpethelper.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import java.util.List;
 
 
 @RestController // controller + responseBody
-@RequestMapping("/api/users")
+@RequestMapping("api/users")
 public class UserRestController {
 
     private final UserService userService;
@@ -33,13 +34,13 @@ public class UserRestController {
     }
 
     @PostMapping // с помощью @RequestBody спринг создаст объект User на основе данных, переданных в запросе
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
         UserDTO createdUser = userService.createUser(userDTO);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUserById(@PathVariable Integer id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUserById(@PathVariable Integer id, @Valid @RequestBody UserDTO userDTO) {
         UserDTO user = userService.updateUserById(id, userDTO);
         /**
          * Возникает вопрос, как готовить Optional -- на уровне контроллера или сервиса?

@@ -1,12 +1,15 @@
 package com.example.lostpethelper.service.impl;
 
 import com.example.lostpethelper.dto.TicketDTO;
+import com.example.lostpethelper.exception.TicketNotFoundException;
+import com.example.lostpethelper.exception.UserNotFoundException;
 import com.example.lostpethelper.mapper.TicketMapper;
 import com.example.lostpethelper.model.Ticket;
 import com.example.lostpethelper.model.User;
 import com.example.lostpethelper.repository.TicketRepository;
 import com.example.lostpethelper.repository.UserRepository;
 import com.example.lostpethelper.service.TicketService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +18,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
-
-    @Autowired
-    public TicketServiceImpl(TicketRepository ticketRepository, UserRepository userRepository) {
-        this.ticketRepository = ticketRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public TicketDTO createTicket(TicketDTO ticketDTO) {
@@ -48,7 +46,7 @@ public class TicketServiceImpl implements TicketService {
     public TicketDTO findTicketById(Integer id) {
         Ticket ticket = ticketRepository
                 .findById(id)
-                .orElseThrow(() ->  new NoSuchElementException("Ticket not found"));
+                .orElseThrow(() ->  new TicketNotFoundException(id));
 
         return TicketMapper.mapToTicketDTO(ticket);
     }
@@ -57,7 +55,7 @@ public class TicketServiceImpl implements TicketService {
     public TicketDTO updateTicketById(Integer id, TicketDTO ticketDTO){
         Ticket existingTicket = ticketRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Ticket not found"));
+                .orElseThrow(() -> new TicketNotFoundException(id));
 
         User user = getUserById(ticketDTO);
 
@@ -82,7 +80,7 @@ public class TicketServiceImpl implements TicketService {
     private User getUserById(TicketDTO ticketDTO) {
         return userRepository
                 .findById(ticketDTO.userID())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(ticketDTO.userID()));
     }
 
 }

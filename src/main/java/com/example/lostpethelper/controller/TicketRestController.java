@@ -3,6 +3,7 @@ package com.example.lostpethelper.controller;
 import com.example.lostpethelper.dto.TicketDTO;
 import com.example.lostpethelper.model.Ticket;
 import com.example.lostpethelper.service.TicketService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tickets")
+@RequestMapping("api/tickets")
 public class TicketRestController {
 
     private final TicketService ticketService;
@@ -34,13 +35,13 @@ public class TicketRestController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketDTO> createTicket(@RequestBody TicketDTO ticket) {
+    public ResponseEntity<TicketDTO> createTicket(@Valid @RequestBody TicketDTO ticket) {
         TicketDTO createdTicket = ticketService.createTicket(ticket);
         return new ResponseEntity<>(createdTicket, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TicketDTO> updateTicketById(@PathVariable Integer id, @RequestBody TicketDTO updatedTicket) {
+    public ResponseEntity<TicketDTO> updateTicketById(@PathVariable Integer id,@Valid @RequestBody TicketDTO updatedTicket) {
         TicketDTO ticket = ticketService.updateTicketById(id, updatedTicket);
         return new ResponseEntity<>(ticket, HttpStatus.OK);
     }

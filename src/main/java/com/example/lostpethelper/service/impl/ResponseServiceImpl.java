@@ -1,6 +1,9 @@
 package com.example.lostpethelper.service.impl;
 
 import com.example.lostpethelper.dto.ResponseDTO;
+import com.example.lostpethelper.exception.ResponseNotFoundException;
+import com.example.lostpethelper.exception.TicketNotFoundException;
+import com.example.lostpethelper.exception.UserNotFoundException;
 import com.example.lostpethelper.mapper.ResponseMapper;
 import com.example.lostpethelper.model.Response;
 import com.example.lostpethelper.model.Ticket;
@@ -9,25 +12,19 @@ import com.example.lostpethelper.repository.ResponseRepository;
 import com.example.lostpethelper.repository.TicketRepository;
 import com.example.lostpethelper.repository.UserRepository;
 import com.example.lostpethelper.service.ResponseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@AllArgsConstructor
 public class ResponseServiceImpl implements ResponseService {
 
     private final ResponseRepository responseRepository;
     private final UserRepository userRepository;
     private final TicketRepository ticketRepository;
-
-    @Autowired
-    public ResponseServiceImpl(ResponseRepository responseRepository, UserRepository userRepository, TicketRepository ticketRepository) {
-        this.responseRepository = responseRepository;
-        this.userRepository = userRepository;
-        this.ticketRepository = ticketRepository;
-    }
 
     @Override
     public List<ResponseDTO> findAllResponses() {
@@ -42,7 +39,7 @@ public class ResponseServiceImpl implements ResponseService {
     public ResponseDTO findResponseById(Integer id) {
         Response response = responseRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Response not found"));
+                .orElseThrow(() -> new ResponseNotFoundException(id));
 
         return ResponseMapper.mapToResponseDTO(response);
     }
@@ -65,7 +62,7 @@ public class ResponseServiceImpl implements ResponseService {
     public ResponseDTO updateResponseById(Integer id, ResponseDTO responseDTO) {
         Response existingResponse = responseRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Response not found"));
+                .orElseThrow(() -> new ResponseNotFoundException(id));
         User user = getUserById(responseDTO);
         Ticket ticket = getTicketById(responseDTO);
 
@@ -84,13 +81,13 @@ public class ResponseServiceImpl implements ResponseService {
     private Ticket getTicketById(ResponseDTO responseDTO) {
         return ticketRepository
                 .findById(responseDTO.ticketId())
-                .orElseThrow(() -> new NoSuchElementException("Ticket not found"));
+                .orElseThrow(() -> new TicketNotFoundException(responseDTO.ticketId()));
     }
 
     private User getUserById(ResponseDTO responseDTO) {
         return userRepository
                 .findById(responseDTO.userId())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(responseDTO.userId()));
     }
 
     @Override

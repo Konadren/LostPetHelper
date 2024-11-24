@@ -1,12 +1,15 @@
 package com.example.lostpethelper.service.impl;
 
 import com.example.lostpethelper.dto.UserDTO;
+import com.example.lostpethelper.exception.UserNotFoundException;
+import com.example.lostpethelper.exception.UserRoleNotFoundException;
 import com.example.lostpethelper.mapper.UserMapper;
 import com.example.lostpethelper.model.User;
 import com.example.lostpethelper.model.UserRole;
 import com.example.lostpethelper.repository.UserRepository;
 import com.example.lostpethelper.repository.UserRoleRepository;
 import com.example.lostpethelper.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,18 +18,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository) {
-        this.userRepository = userRepository;
-        this.userRoleRepository = userRoleRepository;
-    }
-
     @Override
-    @Transactional
     public UserDTO createUser(UserDTO userDTO){
         UserRole userRole = getUserRoleById(userDTO);
 
@@ -38,16 +35,16 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserRole getUserRoleById(UserDTO userDTO) {
-        return userRoleRepository // сюда userRoleRepository надо
+        return userRoleRepository
                 .findById(userDTO.roleId())
-                .orElseThrow(() -> new NoSuchElementException("UserRole not found"));
+                .orElseThrow(() -> new UserRoleNotFoundException(userDTO.roleId()));
     }
 
     @Override
     public UserDTO findUserById(Integer id) {
         User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         return UserMapper.mapToUserDTO(user);
     }
@@ -63,7 +60,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUserById(Integer id, UserDTO userDTO) {
         User existingUser = userRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         UserRole userRole = getUserRoleById(userDTO);
 

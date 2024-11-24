@@ -1,10 +1,13 @@
 package com.example.lostpethelper.service.impl;
 
 import com.example.lostpethelper.dto.UserRoleDTO;
+import com.example.lostpethelper.exception.UserNotFoundException;
+import com.example.lostpethelper.exception.UserRoleNotFoundException;
 import com.example.lostpethelper.mapper.UserRoleMapper;
 import com.example.lostpethelper.model.UserRole;
 import com.example.lostpethelper.repository.UserRoleRepository;
 import com.example.lostpethelper.service.UserRoleService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,26 +16,22 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@AllArgsConstructor
 public class UserRoleServiceImpl implements UserRoleService {
     private final UserRoleRepository userRoleRepository;
-
-    @Autowired
-    public UserRoleServiceImpl(UserRoleRepository userRoleRepository) {
-        this.userRoleRepository = userRoleRepository;
-    }
-
-    //todo: CRUD
 
     @Override
     public UserRoleDTO createUserRole(UserRoleDTO userRoleDTO) {
         UserRole userRole = UserRoleMapper.mapToUserRole(userRoleDTO, null);
         UserRole createdRole = userRoleRepository.save(userRole);
+
         return UserRoleMapper.mapToUserRoleDTO(createdRole);
     }
 
     @Override
     public List<UserRoleDTO> findAllUserRoles() {
         List<UserRole> userRoles = userRoleRepository.findAll();
+
         return userRoles.stream()
                 .map(UserRoleMapper::mapToUserRoleDTO)
                 .toList();
@@ -42,7 +41,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public UserRoleDTO findUserRoleById(Integer id) {
         return UserRoleMapper.mapToUserRoleDTO(userRoleRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User role not found")));
+                .orElseThrow(() -> new UserNotFoundException(id)));
     }
 
     @Transactional
@@ -50,7 +49,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public UserRoleDTO updateUserRoleById(Integer id, UserRoleDTO userRoleDTO) {
         UserRole existingUserRole = userRoleRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User role not found"));
+                .orElseThrow(() -> new UserRoleNotFoundException(id));
 
         existingUserRole.setRoleName(userRoleDTO.roleName());
 
