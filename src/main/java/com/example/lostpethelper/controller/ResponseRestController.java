@@ -1,6 +1,7 @@
 package com.example.lostpethelper.controller;
 
-import com.example.lostpethelper.dto.ResponseDTO;
+import com.example.lostpethelper.dto.response.ResponseFromClientDTO;
+import com.example.lostpethelper.dto.response.ResponseToClientDTO;
 import com.example.lostpethelper.service.ResponseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,36 +26,35 @@ public class ResponseRestController {
     // метод только для админа
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping
-    public ResponseEntity<List<ResponseDTO>> getAllResponses(){
-        List<ResponseDTO> responses = responseService.findAllResponses();
+    public ResponseEntity<List<ResponseToClientDTO>> getAllResponses(){
+        List<ResponseToClientDTO> responses = responseService.findAllResponses();
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')  or hasAuthority('ROLE_ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO> getResponseById(@PathVariable Integer id) {
-        ResponseDTO responseDTO = responseService.findResponseById(id);
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    public ResponseEntity<ResponseToClientDTO> getResponseById(@PathVariable Integer id) {
+        ResponseToClientDTO responseFromClientDTO = responseService.findResponseById(id);
+        return new ResponseEntity<>(responseFromClientDTO, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<ResponseDTO> createResponse(@Valid @RequestBody ResponseDTO responseDTO) {
-        ResponseDTO createdResponse = responseService.createResponse(responseDTO);
+    public ResponseEntity<ResponseToClientDTO> createResponse(
+            @Valid @RequestBody ResponseFromClientDTO responseFromClientDTO) {
+        ResponseToClientDTO createdResponse = responseService.createResponse(responseFromClientDTO);
         return new ResponseEntity<>(createdResponse, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')  or hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseDTO> updateResponseById(@PathVariable Integer id, @Valid @RequestBody ResponseDTO responseDTO) {
-        ResponseDTO updatedResponseDTO = responseService.updateResponseById(id, responseDTO);
-
-
-
-        return new ResponseEntity<>(updatedResponseDTO, HttpStatus.NO_CONTENT);
+    public ResponseEntity<ResponseToClientDTO> updateResponseById(
+            @PathVariable Integer id, @Valid @RequestBody ResponseFromClientDTO responseFromClientDTO) {
+        ResponseToClientDTO updatedResponseFromClientDTO = responseService.updateResponseById(id, responseFromClientDTO);
+        return new ResponseEntity<>(updatedResponseFromClientDTO, HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')  or hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResponseById(@PathVariable Integer id) {
         responseService.deleteResponseById(id);

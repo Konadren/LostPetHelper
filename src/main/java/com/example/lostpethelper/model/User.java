@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,11 +37,14 @@ public class User {
     @Column(name = "password")
     private String password;
 
-//    @ManyToOne
-//    @JoinColumn(name = "role", referencedColumnName = "role_id") // name указывает на имя колонки из БД
-//    private UserRole role;
-
     @Column(name = "roles")
     private String roles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Response> responses;
+
 
 }

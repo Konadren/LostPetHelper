@@ -1,11 +1,12 @@
-package com.example.lostpethelper.dto;
+package com.example.lostpethelper.dto.user;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-// не хотелось бы передавать мыло и пароль в открытую
-// возможно при дальнейшей доработке проекта придется сделать другой ДТО
-// (используемый условно на странице тикета, а этот ДТО использовать в личном кабинете)
-public record UserDTO(
+// DTO для личного кабинета, которое мы выдаём клиенту
+public record UserProfileDTO(
         @NotNull(message = "Name should`t be blank")
         @Size(min = 3, max = 50, message = "Name should be between 3 and 50")
         String name,
@@ -22,8 +23,6 @@ public record UserDTO(
         String email,
         @NotNull(message = "Password can`t be blank")
         @Size(min = 8, max = 30, message = "Password size should be between 8 and 30")
-        String password,
-        @NotNull(message = "Roles can`t be null")
-        String roles
+        String password
 ) {
 }

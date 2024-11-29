@@ -1,16 +1,18 @@
 package com.example.lostpethelper.service;
 
-import com.example.lostpethelper.dto.ResponseDTO;
+import com.example.lostpethelper.dto.response.ResponseFromClientDTO;
+import com.example.lostpethelper.dto.response.ResponseToClientDTO;
+
 import java.util.List;
 
 public interface ResponseService {
-    List<ResponseDTO> findAllResponses();
+    List<ResponseToClientDTO> findAllResponses();
 
-    ResponseDTO findResponseById(Integer id);
+    ResponseToClientDTO findResponseById(Integer id);
 
-    ResponseDTO createResponse(ResponseDTO responseDTO);
+    ResponseToClientDTO createResponse(ResponseFromClientDTO responseFromClientDTO);
 
-    ResponseDTO updateResponseById(Integer id, ResponseDTO responseDTO);
+    ResponseToClientDTO updateResponseById(Integer id, ResponseFromClientDTO responseFromClientDTO);
 
     void deleteResponseById(Integer id);
 }

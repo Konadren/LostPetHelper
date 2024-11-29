@@ -1,10 +1,11 @@
 package com.example.lostpethelper.service.impl;
 
-import com.example.lostpethelper.dto.TicketFromClientDTO;
-import com.example.lostpethelper.dto.TicketToClientDTO;
+import com.example.lostpethelper.dto.ticket.TicketFromClientDTO;
+import com.example.lostpethelper.dto.ticket.TicketToClientDTO;
 import com.example.lostpethelper.exception.TicketNotFoundException;
 import com.example.lostpethelper.exception.UserNotFoundException;
 import com.example.lostpethelper.mapper.TicketMapper;
+import com.example.lostpethelper.model.Response;
 import com.example.lostpethelper.model.Ticket;
 import com.example.lostpethelper.model.User;
 import com.example.lostpethelper.repository.TicketRepository;
@@ -25,6 +26,9 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public TicketToClientDTO createTicket(TicketFromClientDTO ticketFromClientDTO) {
         User user = getUserById(ticketFromClientDTO);
+
+
+        // List<Response> responses
         Ticket ticket = TicketMapper.mapToTicket(ticketFromClientDTO, null, user);
 
         System.out.println(ticket);

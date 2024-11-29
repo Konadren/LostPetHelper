@@ -1,7 +1,8 @@
 package com.example.lostpethelper.controller;
 
 
-import com.example.lostpethelper.dto.UserDTO;
+import com.example.lostpethelper.dto.user.UserDTO;
+import com.example.lostpethelper.dto.user.UserProfileDTO;
 import com.example.lostpethelper.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class AuthRestController {
 
     //todo: почему-то при создании юзера с паролем, который не проходит ошибку, выдает 401 authorized
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
+    public ResponseEntity<UserProfileDTO> createUser(@Valid @RequestBody UserProfileDTO userDTO) {
+        UserProfileDTO createdUser = userService.createUser(userDTO);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 

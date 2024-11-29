@@ -1,6 +1,7 @@
 package com.example.lostpethelper.service.impl;
 
-import com.example.lostpethelper.dto.ResponseDTO;
+import com.example.lostpethelper.dto.response.ResponseFromClientDTO;
+import com.example.lostpethelper.dto.response.ResponseToClientDTO;
 import com.example.lostpethelper.exception.ResponseNotFoundException;
 import com.example.lostpethelper.exception.TicketNotFoundException;
 import com.example.lostpethelper.exception.UserNotFoundException;
@@ -15,6 +16,8 @@ import com.example.lostpethelper.service.ResponseService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -26,67 +29,67 @@ public class ResponseServiceImpl implements ResponseService {
     private final TicketRepository ticketRepository;
 
     @Override
-    public List<ResponseDTO> findAllResponses() {
+    public List<ResponseToClientDTO> findAllResponses() {
         List<Response> responses = responseRepository.findAll();
 
         return responses.stream()
-                .map(ResponseMapper::mapToResponseDTO)
+                .map(ResponseMapper::mapToResponseToClientDTO)
                 .toList();
     }
 
     @Override
-    public ResponseDTO findResponseById(Integer id) {
+    public ResponseToClientDTO findResponseById(Integer id) {
         Response response = responseRepository
                 .findById(id)
                 .orElseThrow(() -> new ResponseNotFoundException(id));
 
-        return ResponseMapper.mapToResponseDTO(response);
+        return ResponseMapper.mapToResponseToClientDTO(response);
     }
 
     @Override
     @Transactional
-    public ResponseDTO createResponse(ResponseDTO responseDTO) {
-        User user = getUserById(responseDTO);
-        Ticket ticket = getTicketById(responseDTO);
+    public ResponseToClientDTO createResponse(ResponseFromClientDTO responseFromClientDTO) {
+        User user = getUserById(responseFromClientDTO);
+        Ticket ticket = getTicketById(responseFromClientDTO);
 
-        Response response = ResponseMapper.mapToResponse(responseDTO, null, user, ticket); // todo: криво-косо, почитать про MapStruct
+        Response response = ResponseMapper.mapToResponse(responseFromClientDTO, null, user, ticket); // todo: криво-косо, почитать про MapStruct
 
         Response createdResponse = responseRepository.save(response);
 
-        return ResponseMapper.mapToResponseDTO(createdResponse);
+        return ResponseMapper.mapToResponseToClientDTO(createdResponse);
     }
 
     @Override
     @Transactional
-    public ResponseDTO updateResponseById(Integer id, ResponseDTO responseDTO) {
+    public ResponseToClientDTO updateResponseById(Integer id, ResponseFromClientDTO responseFromClientDTO) {
         Response existingResponse = responseRepository
                 .findById(id)
                 .orElseThrow(() -> new ResponseNotFoundException(id));
-        User user = getUserById(responseDTO);
-        Ticket ticket = getTicketById(responseDTO);
+        User user = getUserById(responseFromClientDTO);
+        Ticket ticket = getTicketById(responseFromClientDTO);
 
-        existingResponse.setMessage(responseDTO.message());
+        existingResponse.setMessage(responseFromClientDTO.message());
         existingResponse.setTicket(ticket);
         existingResponse.setUser(user);
-        existingResponse.setImgURI(responseDTO.imgURI());
-        existingResponse.setLocation(responseDTO.location());
-        existingResponse.setCreatedAt(responseDTO.createdAt());
+        existingResponse.setImgURI(responseFromClientDTO.imgURI());
+        existingResponse.setLocation(responseFromClientDTO.location());
+        existingResponse.setCreatedAt(OffsetDateTime.now());
 
         Response updatedResponse = responseRepository.save(existingResponse);
 
-        return ResponseMapper.mapToResponseDTO(updatedResponse);
+        return ResponseMapper.mapToResponseToClientDTO(updatedResponse);
     }
 
-    private Ticket getTicketById(ResponseDTO responseDTO) {
+    private Ticket getTicketById(ResponseFromClientDTO responseFromClientDTO) {
         return ticketRepository
-                .findById(responseDTO.ticketId())
-                .orElseThrow(() -> new TicketNotFoundException(responseDTO.ticketId()));
+                .findById(responseFromClientDTO.ticketId())
+                .orElseThrow(() -> new TicketNotFoundException(responseFromClientDTO.ticketId()));
     }
 
-    private User getUserById(ResponseDTO responseDTO) {
+    private User getUserById(ResponseFromClientDTO responseFromClientDTO) {
         return userRepository
-                .findById(responseDTO.userId())
-                .orElseThrow(() -> new UserNotFoundException(responseDTO.userId()));
+                .findById(responseFromClientDTO.userId())
+                .orElseThrow(() -> new UserNotFoundException(responseFromClientDTO.userId()));
     }
 
     @Override

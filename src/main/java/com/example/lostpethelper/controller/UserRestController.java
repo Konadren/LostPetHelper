@@ -1,6 +1,7 @@
 package com.example.lostpethelper.controller;
 
-import com.example.lostpethelper.dto.UserDTO;
+import com.example.lostpethelper.dto.user.UserDTO;
+import com.example.lostpethelper.dto.user.UserProfileDTO;
 import com.example.lostpethelper.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@RestController // controller + responseBody
+@RestController
 @RequestMapping("api/users")
 public class UserRestController {
 
@@ -22,7 +23,6 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    // метод только для админа
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers(){
@@ -37,24 +37,14 @@ public class UserRestController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-//    // todo: перекинуть метод в спец. контроллер для регистрации
-//    @PostMapping // с помощью @RequestBody спринг создаст объект User на основе данных, переданных в запросе
-//    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
-//        UserDTO createdUser = userService.createUser(userDTO);
-//        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-//    }
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUserById(@PathVariable Integer id, @Valid @RequestBody UserDTO userDTO) {
-        UserDTO user = userService.updateUserById(id, userDTO);
-        /**
-         * Возникает вопрос, как готовить Optional -- на уровне контроллера или сервиса?
-         * Выбрал второй вариант, поэтому нужно будет сделать обработчик ошибок
-         * Да и в целом разобраться в теме
-         */
+    public ResponseEntity<UserProfileDTO> updateUserById(@PathVariable Integer id, @Valid @RequestBody UserProfileDTO userDTO) {
+        UserProfileDTO user = userService.updateUserById(id, userDTO);
         return new ResponseEntity<>(user, HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Integer id) {
         userService.deleteUserById(id);

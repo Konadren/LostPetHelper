@@ -1,7 +1,7 @@
 package com.example.lostpethelper.controller;
 
-import com.example.lostpethelper.dto.TicketFromClientDTO;
-import com.example.lostpethelper.dto.TicketToClientDTO;
+import com.example.lostpethelper.dto.ticket.TicketFromClientDTO;
+import com.example.lostpethelper.dto.ticket.TicketToClientDTO;
 import com.example.lostpethelper.service.TicketService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

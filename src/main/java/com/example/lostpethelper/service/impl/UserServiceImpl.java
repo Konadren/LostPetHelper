@@ -1,22 +1,18 @@
 package com.example.lostpethelper.service.impl;
 
-import com.example.lostpethelper.dto.UserDTO;
+import com.example.lostpethelper.dto.user.UserDTO;
+import com.example.lostpethelper.dto.user.UserProfileDTO;
 import com.example.lostpethelper.exception.UserNotFoundException;
-import com.example.lostpethelper.exception.UserRoleNotFoundException;
 import com.example.lostpethelper.mapper.UserMapper;
 import com.example.lostpethelper.model.User;
-import com.example.lostpethelper.model.UserRole;
 import com.example.lostpethelper.repository.UserRepository;
-import com.example.lostpethelper.repository.UserRoleRepository;
 import com.example.lostpethelper.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
@@ -25,20 +21,14 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDTO createUser(UserDTO userDTO){
+    public UserProfileDTO createUser(UserProfileDTO userDTO){
         User user = UserMapper.mapToUser(userDTO, null); // криво-косо, почитать про MapStruct
         user.setPassword(passwordEncoder.encode(userDTO.password()));
 
         User savedUser = userRepository.save(user);
 
-        return UserMapper.mapToUserDTO(savedUser);
+        return UserMapper.mapToUserProfileDTO(savedUser);
     }
-
-//    private UserRole getUserRoleById(UserDTO userDTO) {
-//        return userRoleRepository
-//                .findById(userDTO.roleId())
-//                .orElseThrow(() -> new UserRoleNotFoundException(userDTO.roleId()));
-//    }
 
     @Override
     public UserDTO findUserById(Integer id) {
@@ -57,21 +47,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO updateUserById(Integer id, UserDTO userDTO) {
+    public UserProfileDTO updateUserById(Integer id, UserProfileDTO userDTO) {
         User existingUser = userRepository
                 .findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         existingUser.setName(userDTO.name());
         existingUser.setLastname(userDTO.lastname());
-        existingUser.setRoles(userDTO.roles());
+        existingUser.setRoles("ROLE_USER"); // хардкод
         existingUser.setPassword(userDTO.password());
         existingUser.setPhoneNumber(userDTO.phoneNumber());
         existingUser.setEmail(userDTO.email());
 
         User updatedUser = userRepository.save(existingUser);
 
-        return UserMapper.mapToUserDTO(updatedUser);
+        return UserMapper.mapToUserProfileDTO(updatedUser);
     }
 
     @Override

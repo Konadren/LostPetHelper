@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.OffsetDateTime;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -18,11 +22,12 @@ public class Ticket {
     @Column(name = "ticket_id")
     private Integer ticketID;
 
-    @ManyToOne // каждый тикет связан с одним пользователем
-    @JoinColumn(name = "user_id") // @Column(name = ...) нельзя
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "ticket_type")
+    // should be LOST or FOUND
     private String ticketType;
 
     @Column(name = "pet_name")
@@ -39,5 +44,11 @@ public class Ticket {
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt = OffsetDateTime.now();
+
+    //todo: private List<Response> responses, one-to-many
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Response> responses;
+
 
 }

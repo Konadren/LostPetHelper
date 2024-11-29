@@ -1,7 +1,7 @@
 package com.example.lostpethelper.service;
 
-import com.example.lostpethelper.dto.TicketFromClientDTO;
-import com.example.lostpethelper.dto.TicketToClientDTO;
+import com.example.lostpethelper.dto.ticket.TicketFromClientDTO;
+import com.example.lostpethelper.dto.ticket.TicketToClientDTO;
 
 import java.util.List;
 
