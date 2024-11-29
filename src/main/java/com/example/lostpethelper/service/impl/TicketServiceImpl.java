@@ -1,6 +1,7 @@
 package com.example.lostpethelper.service.impl;
 
-import com.example.lostpethelper.dto.TicketDTO;
+import com.example.lostpethelper.dto.TicketFromClientDTO;
+import com.example.lostpethelper.dto.TicketToClientDTO;
 import com.example.lostpethelper.exception.TicketNotFoundException;
 import com.example.lostpethelper.exception.UserNotFoundException;
 import com.example.lostpethelper.mapper.TicketMapper;
@@ -10,12 +11,10 @@ import com.example.lostpethelper.repository.TicketRepository;
 import com.example.lostpethelper.repository.UserRepository;
 import com.example.lostpethelper.service.TicketService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -24,17 +23,18 @@ public class TicketServiceImpl implements TicketService {
     private final UserRepository userRepository;
 
     @Override
-    public TicketDTO createTicket(TicketDTO ticketDTO) {
-        User user = getUserById(ticketDTO);
-        Ticket ticket = TicketMapper.mapToTicket(ticketDTO, null, user);
+    public TicketToClientDTO createTicket(TicketFromClientDTO ticketFromClientDTO) {
+        User user = getUserById(ticketFromClientDTO);
+        Ticket ticket = TicketMapper.mapToTicket(ticketFromClientDTO, null, user);
 
+        System.out.println(ticket);
         Ticket savedTicket = ticketRepository.save(ticket);
 
         return TicketMapper.mapToTicketDTO(savedTicket);
     }
 
     @Override
-    public List<TicketDTO> findAllTickets(){
+    public List<TicketToClientDTO> findAllTickets(){
         List<Ticket> tickets = ticketRepository.findAll();
 
         return tickets.stream()
@@ -43,7 +43,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public TicketDTO findTicketById(Integer id) {
+    public TicketToClientDTO findTicketById(Integer id) {
         Ticket ticket = ticketRepository
                 .findById(id)
                 .orElseThrow(() ->  new TicketNotFoundException(id));
@@ -52,20 +52,20 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public TicketDTO updateTicketById(Integer id, TicketDTO ticketDTO){
+    public TicketToClientDTO updateTicketById(Integer id, TicketFromClientDTO ticketFromClientDTO){
         Ticket existingTicket = ticketRepository
                 .findById(id)
                 .orElseThrow(() -> new TicketNotFoundException(id));
 
-        User user = getUserById(ticketDTO);
+        User user = getUserById(ticketFromClientDTO);
 
-        existingTicket.setTicketType(ticketDTO.ticketType());
+        existingTicket.setTicketType(ticketFromClientDTO.ticketType());
         existingTicket.setUser(user);
-        existingTicket.setDescription(ticketDTO.description());
-        existingTicket.setLocation(ticketDTO.location());
-        existingTicket.setCreatedAt(ticketDTO.createdAt());
-        existingTicket.setImgURI(ticketDTO.imgURI());
-        existingTicket.setPetName(ticketDTO.petName());
+        existingTicket.setDescription(ticketFromClientDTO.description());
+        existingTicket.setLocation(ticketFromClientDTO.location());
+        existingTicket.setCreatedAt(OffsetDateTime.now());
+        existingTicket.setImgURI(ticketFromClientDTO.imgURI());
+        existingTicket.setPetName(ticketFromClientDTO.petName());
 
         Ticket updatedTicket = ticketRepository.save(existingTicket);
 
@@ -77,10 +77,10 @@ public class TicketServiceImpl implements TicketService {
         ticketRepository.deleteById(id);
     }
 
-    private User getUserById(TicketDTO ticketDTO) {
+    private User getUserById(TicketFromClientDTO ticketFromClientDTO) {
         return userRepository
-                .findById(ticketDTO.userID())
-                .orElseThrow(() -> new UserNotFoundException(ticketDTO.userID()));
+                .findById(ticketFromClientDTO.userID())
+                .orElseThrow(() -> new UserNotFoundException(ticketFromClientDTO.userID()));
     }
 
 }

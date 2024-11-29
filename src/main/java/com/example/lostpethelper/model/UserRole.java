@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+//todo: переделать на ENUM
 @Data // hashCode, equals, toString, get/set
 @NoArgsConstructor // без аргументов
 @AllArgsConstructor // со всеми аргументами

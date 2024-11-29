@@ -3,9 +3,9 @@ package com.example.lostpethelper.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.time.OffsetDateTime;
-
-public record TicketDTO(
+public record TicketFromClientDTO(
+        @NotNull(message = "User ID from ticket can`t be empty")
+        Integer userID,
         @NotNull(message = "Ticket shouldn`t be empty") //todo: иной подход к тикету сделать
         String ticketType,
         @NotNull(message = "Pet name should`t be empty")
@@ -18,10 +18,6 @@ public record TicketDTO(
         @Size(min = 10, max = 100, message = "Location should be between 10 and 100")
         String location,
         @NotNull(message = "Image field shouldn`t be empty")
-        String imgURI,
-        @NotNull(message = "Created At field can`t be empty")
-        OffsetDateTime createdAt,
-        @NotNull(message = "User ID from ticket can`t be empty")
-        Integer userID
+        String imgURI
 ) {
 }

@@ -13,11 +13,11 @@ public class UserMapper {
                 user.getPhoneNumber(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getRole().getRoleID()
+                user.getRoles()
         );
     }
 
-    public static User mapToUser(UserDTO userDTO, UserRole role, Integer userID) {
+    public static User mapToUser(UserDTO userDTO, Integer userID) {
         return new User(
                 userID,
                 userDTO.name(),
@@ -25,7 +25,7 @@ public class UserMapper {
                 userDTO.phoneNumber(),
                 userDTO.email(),
                 userDTO.password(),
-                role
+                userDTO.roles()
         );
     }
 

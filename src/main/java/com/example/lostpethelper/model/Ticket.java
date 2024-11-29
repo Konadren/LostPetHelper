@@ -15,7 +15,12 @@ import java.time.OffsetDateTime;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ticket_id")
     private Integer ticketID;
+
+    @ManyToOne // каждый тикет связан с одним пользователем
+    @JoinColumn(name = "user_id") // @Column(name = ...) нельзя
+    private User user;
 
     @Column(name = "ticket_type")
     private String ticketType;
@@ -35,7 +40,4 @@ public class Ticket {
     @Column(name = "created_at")
     private OffsetDateTime createdAt = OffsetDateTime.now();
 
-    @ManyToOne // каждый тикет связан с одним пользователем
-    @JoinColumn(name = "user_id") // @Column(name = ...) нельзя
-    private User user;
 }

@@ -23,7 +23,7 @@ public record UserDTO(
         @NotNull(message = "Password can`t be blank")
         @Size(min = 8, max = 30, message = "Password size should be between 8 and 30")
         String password,
-        @NotNull(message = "Role ID can`t be null")
-        Integer roleId
+        @NotNull(message = "Roles can`t be null")
+        String roles
 ) {
 }

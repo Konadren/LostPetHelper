@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -21,23 +22,27 @@ public class UserRestController {
         this.userService = userService;
     }
 
+    // метод только для админа
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers(){
         List<UserDTO> users = userService.findAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @GetMapping("/{id}") // с помощью @PathVariable берем из запроса id
     public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) {
         UserDTO user = userService.findUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping // с помощью @RequestBody спринг создаст объект User на основе данных, переданных в запросе
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-    }
+//    // todo: перекинуть метод в спец. контроллер для регистрации
+//    @PostMapping // с помощью @RequestBody спринг создаст объект User на основе данных, переданных в запросе
+//    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
+//        UserDTO createdUser = userService.createUser(userDTO);
+//        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUserById(@PathVariable Integer id, @Valid @RequestBody UserDTO userDTO) {
@@ -50,7 +55,6 @@ public class UserRestController {
         return new ResponseEntity<>(user, HttpStatus.NO_CONTENT);
     }
 
-    //todo: deleteUser()
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Integer id) {
         userService.deleteUserById(id);

@@ -11,6 +11,7 @@ import com.example.lostpethelper.repository.UserRoleRepository;
 import com.example.lostpethelper.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,24 +22,23 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDTO createUser(UserDTO userDTO){
-        UserRole userRole = getUserRoleById(userDTO);
-
-        User user = UserMapper.mapToUser(userDTO, userRole, null); // криво-косо, почитать про MapStruct
+        User user = UserMapper.mapToUser(userDTO, null); // криво-косо, почитать про MapStruct
+        user.setPassword(passwordEncoder.encode(userDTO.password()));
 
         User savedUser = userRepository.save(user);
 
         return UserMapper.mapToUserDTO(savedUser);
     }
 
-    private UserRole getUserRoleById(UserDTO userDTO) {
-        return userRoleRepository
-                .findById(userDTO.roleId())
-                .orElseThrow(() -> new UserRoleNotFoundException(userDTO.roleId()));
-    }
+//    private UserRole getUserRoleById(UserDTO userDTO) {
+//        return userRoleRepository
+//                .findById(userDTO.roleId())
+//                .orElseThrow(() -> new UserRoleNotFoundException(userDTO.roleId()));
+//    }
 
     @Override
     public UserDTO findUserById(Integer id) {
@@ -62,11 +62,9 @@ public class UserServiceImpl implements UserService {
                 .findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        UserRole userRole = getUserRoleById(userDTO);
-
         existingUser.setName(userDTO.name());
         existingUser.setLastname(userDTO.lastname());
-        existingUser.setRole(userRole);
+        existingUser.setRoles(userDTO.roles());
         existingUser.setPassword(userDTO.password());
         existingUser.setPhoneNumber(userDTO.phoneNumber());
         existingUser.setEmail(userDTO.email());

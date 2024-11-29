@@ -6,10 +6,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// пускай этот контроллер будет доступен только админу
 @RestController
 @RequestMapping("api/user-roles")
 public class UserRoleRestController {
@@ -21,6 +23,8 @@ public class UserRoleRestController {
         this.userRoleService = userRoleService;
     }
 
+    // метод только для админа
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserRoleDTO>> getAllUserRoles(){
         List<UserRoleDTO> userRoles = userRoleService.findAllUserRoles();
