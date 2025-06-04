@@ -1,4 +1,4 @@
-package com.example.lostpethelper.model;
+package com.example.lostpethelper.dto.rest;
 
 import lombok.Builder;
 import lombok.Data;

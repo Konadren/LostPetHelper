@@ -1,10 +1,6 @@
-package com.example.lostpethelper.controller;
+package com.example.lostpethelper.exception;
 
-import com.example.lostpethelper.exception.ResponseNotFoundException;
-import com.example.lostpethelper.exception.TicketNotFoundException;
-import com.example.lostpethelper.exception.UserNotFoundException;
-import com.example.lostpethelper.exception.UserRoleNotFoundException;
-import com.example.lostpethelper.model.ApiErrorResponse;
+import com.example.lostpethelper.dto.rest.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

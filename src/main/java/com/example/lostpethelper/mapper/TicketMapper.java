@@ -1,9 +1,8 @@
 package com.example.lostpethelper.mapper;
 
 import com.example.lostpethelper.dto.response.ResponseToClientDTO;
-import com.example.lostpethelper.dto.ticket.TicketFromClientDTO;
-import com.example.lostpethelper.dto.ticket.TicketToClientDTO;
-import com.example.lostpethelper.model.Response;
+import com.example.lostpethelper.dto.rest.ticket.TicketRq;
+import com.example.lostpethelper.dto.rest.ticket.TicketRs;
 import com.example.lostpethelper.model.Ticket;
 import com.example.lostpethelper.model.User;
 
@@ -11,8 +10,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public class TicketMapper {
-    public static TicketToClientDTO mapToTicketDTO(Ticket ticket) {
-        return new TicketToClientDTO(
+    public static TicketRs mapToTicketDTO(Ticket ticket) {
+        return new TicketRs(
                 ticket.getUser().getUserID(),
                 ticket.getTicketType(),
                 ticket.getPetName(),
@@ -24,16 +23,16 @@ public class TicketMapper {
 
     }
 
-    public static Ticket mapToTicket(TicketFromClientDTO ticketFromClientDTO, Integer id,
+    public static Ticket mapToTicket(TicketRq ticketRq, Integer id,
                                      User user) {
         return new Ticket(
                 id,
                 user,
-                ticketFromClientDTO.ticketType(),
-                ticketFromClientDTO.petName(),
-                ticketFromClientDTO.description(),
-                ticketFromClientDTO.location(),
-                ticketFromClientDTO.imgURI(),
+                ticketRq.ticketType(),
+                ticketRq.petName(),
+                ticketRq.description(),
+                ticketRq.location(),
+                ticketRq.imgURI(),
                 OffsetDateTime.now(), // todo: подумать над этим
                 List.of() // todo: хардкод
         );

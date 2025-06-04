@@ -1,44 +1,40 @@
 package com.example.lostpethelper.service.impl;
 
-import com.example.lostpethelper.dto.ticket.TicketFromClientDTO;
-import com.example.lostpethelper.dto.ticket.TicketToClientDTO;
+import com.example.lostpethelper.dto.rest.ticket.TicketRq;
+import com.example.lostpethelper.dto.rest.ticket.TicketRs;
 import com.example.lostpethelper.exception.TicketNotFoundException;
 import com.example.lostpethelper.exception.UserNotFoundException;
 import com.example.lostpethelper.mapper.TicketMapper;
-import com.example.lostpethelper.model.Response;
 import com.example.lostpethelper.model.Ticket;
 import com.example.lostpethelper.model.User;
 import com.example.lostpethelper.repository.TicketRepository;
 import com.example.lostpethelper.repository.UserRepository;
 import com.example.lostpethelper.service.TicketService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
 
     @Override
-    public TicketToClientDTO createTicket(TicketFromClientDTO ticketFromClientDTO) {
-        User user = getUserById(ticketFromClientDTO);
+    public TicketRs create(TicketRq ticketRq) {
 
+        User user = getUserById(ticketRq);
+        Ticket ticket = TicketMapper.mapToTicket(ticketRq, null, user);
 
-        // List<Response> responses
-        Ticket ticket = TicketMapper.mapToTicket(ticketFromClientDTO, null, user);
-
-        System.out.println(ticket);
         Ticket savedTicket = ticketRepository.save(ticket);
 
         return TicketMapper.mapToTicketDTO(savedTicket);
     }
 
     @Override
-    public List<TicketToClientDTO> findAllTickets(){
+    public List<TicketRs> findALl() {
         List<Ticket> tickets = ticketRepository.findAll();
 
         return tickets.stream()
@@ -47,29 +43,29 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public TicketToClientDTO findTicketById(Integer id) {
+    public TicketRs get(Integer id) {
         Ticket ticket = ticketRepository
                 .findById(id)
-                .orElseThrow(() ->  new TicketNotFoundException(id));
+                .orElseThrow(() -> new TicketNotFoundException(id));
 
         return TicketMapper.mapToTicketDTO(ticket);
     }
 
     @Override
-    public TicketToClientDTO updateTicketById(Integer id, TicketFromClientDTO ticketFromClientDTO){
+    public TicketRs update(Integer id, TicketRq ticketRq) {
         Ticket existingTicket = ticketRepository
                 .findById(id)
                 .orElseThrow(() -> new TicketNotFoundException(id));
 
-        User user = getUserById(ticketFromClientDTO);
+        User user = getUserById(ticketRq);
 
-        existingTicket.setTicketType(ticketFromClientDTO.ticketType());
+        existingTicket.setTicketType(ticketRq.ticketType());
         existingTicket.setUser(user);
-        existingTicket.setDescription(ticketFromClientDTO.description());
-        existingTicket.setLocation(ticketFromClientDTO.location());
+        existingTicket.setDescription(ticketRq.description());
+        existingTicket.setLocation(ticketRq.location());
         existingTicket.setCreatedAt(OffsetDateTime.now());
-        existingTicket.setImgURI(ticketFromClientDTO.imgURI());
-        existingTicket.setPetName(ticketFromClientDTO.petName());
+        existingTicket.setImgURI(ticketRq.imgURI());
+        existingTicket.setPetName(ticketRq.petName());
 
         Ticket updatedTicket = ticketRepository.save(existingTicket);
 
@@ -77,14 +73,14 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void deleteTicketById(Integer id) {
+    public void delete(Integer id) {
         ticketRepository.deleteById(id);
     }
 
-    private User getUserById(TicketFromClientDTO ticketFromClientDTO) {
+    private User getUserById(TicketRq ticketRq) {
         return userRepository
-                .findById(ticketFromClientDTO.userID())
-                .orElseThrow(() -> new UserNotFoundException(ticketFromClientDTO.userID()));
+                .findById(ticketRq.userID())
+                .orElseThrow(() -> new UserNotFoundException(ticketRq.userID()));
     }
 
 }

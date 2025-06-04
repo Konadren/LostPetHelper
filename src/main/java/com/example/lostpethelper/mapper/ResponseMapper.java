@@ -1,6 +1,5 @@
 package com.example.lostpethelper.mapper;
 
-import com.example.lostpethelper.dto.response.ResponseFromClientDTO;
 import com.example.lostpethelper.dto.response.ResponseToClientDTO;
 import com.example.lostpethelper.model.Response;
 import com.example.lostpethelper.model.Ticket;
@@ -20,12 +19,12 @@ public class ResponseMapper {
         );
     }
 
-    public static Response mapToResponse(ResponseFromClientDTO responseFromClientDTO, Integer id, User user, Ticket ticket) {
+    public static Response mapToResponse(ResponseRq responseRq, Integer id, User user, Ticket ticket) {
         return new Response(
                 id,
-                responseFromClientDTO.message(),
-                responseFromClientDTO.location(),
-                responseFromClientDTO.imgURI(),
+                responseRq.message(),
+                responseRq.location(),
+                responseRq.imgURI(),
                 OffsetDateTime.now(),
                 user,
                 ticket

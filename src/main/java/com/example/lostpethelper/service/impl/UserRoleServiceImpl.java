@@ -1,35 +1,34 @@
 package com.example.lostpethelper.service.impl;
 
-import com.example.lostpethelper.dto.UserRoleDTO;
+import com.example.lostpethelper.dto.rest.role.UserRoleRs;
 import com.example.lostpethelper.exception.UserNotFoundException;
 import com.example.lostpethelper.exception.UserRoleNotFoundException;
 import com.example.lostpethelper.mapper.UserRoleMapper;
 import com.example.lostpethelper.model.UserRole;
 import com.example.lostpethelper.repository.UserRoleRepository;
 import com.example.lostpethelper.service.UserRoleService;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserRoleServiceImpl implements UserRoleService {
+
     private final UserRoleRepository userRoleRepository;
 
     @Override
-    public UserRoleDTO createUserRole(UserRoleDTO userRoleDTO) {
-        UserRole userRole = UserRoleMapper.mapToUserRole(userRoleDTO, null);
+    public UserRoleRs create(UserRoleRs userRoleRs) {
+        UserRole userRole = UserRoleMapper.mapToUserRole(userRoleRs, null);
         UserRole createdRole = userRoleRepository.save(userRole);
 
         return UserRoleMapper.mapToUserRoleDTO(createdRole);
     }
 
     @Override
-    public List<UserRoleDTO> findAllUserRoles() {
+    public List<UserRoleRs> findAll() {
         List<UserRole> userRoles = userRoleRepository.findAll();
 
         return userRoles.stream()
@@ -38,7 +37,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRoleDTO findUserRoleById(Integer id) {
+    public UserRoleRs get(Integer id) {
         return UserRoleMapper.mapToUserRoleDTO(userRoleRepository
                 .findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id)));
@@ -46,12 +45,12 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Transactional
     @Override
-    public UserRoleDTO updateUserRoleById(Integer id, UserRoleDTO userRoleDTO) {
+    public UserRoleRs update(Integer id, UserRoleRs userRoleRs) {
         UserRole existingUserRole = userRoleRepository
                 .findById(id)
                 .orElseThrow(() -> new UserRoleNotFoundException(id));
 
-        existingUserRole.setRoleName(userRoleDTO.roleName());
+        existingUserRole.setRoleName(userRoleRs.roleName());
 
         UserRole updatedUserRole = userRoleRepository.save(existingUserRole);
 

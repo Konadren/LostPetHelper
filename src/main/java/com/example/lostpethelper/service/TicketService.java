@@ -1,18 +1,19 @@
 package com.example.lostpethelper.service;
 
-import com.example.lostpethelper.dto.ticket.TicketFromClientDTO;
-import com.example.lostpethelper.dto.ticket.TicketToClientDTO;
+import com.example.lostpethelper.dto.rest.ticket.TicketRq;
+import com.example.lostpethelper.dto.rest.ticket.TicketRs;
 
 import java.util.List;
 
 public interface TicketService {
-    List<TicketToClientDTO> findAllTickets();
 
-    TicketToClientDTO findTicketById(Integer id);
+    List<TicketRs> findALl();
 
-    TicketToClientDTO createTicket(TicketFromClientDTO ticket);
+    TicketRs get(Integer id);
 
-    TicketToClientDTO updateTicketById(Integer id, TicketFromClientDTO updatedTicket);
+    TicketRs create(TicketRq ticket);
 
-    void deleteTicketById(Integer id);
+    TicketRs update(Integer id, TicketRq updatedTicket);
+
+    void delete(Integer id);
 }

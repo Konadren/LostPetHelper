@@ -1,23 +1,29 @@
 package com.example.lostpethelper.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
-//todo: переделать на ENUM
-@Data // hashCode, equals, toString, get/set
-@NoArgsConstructor // без аргументов
-@AllArgsConstructor // со всеми аргументами
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "user_roles")
+@Table
 public class UserRole {
     @Id
-    @Column(name = "role_id")
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer roleID;
+    private Integer id;
 
-    @Column(name = "role_name")
-    private String roleName;
+    @Column
+    private String name;
 }

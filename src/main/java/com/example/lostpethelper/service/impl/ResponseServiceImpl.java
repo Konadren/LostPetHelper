@@ -1,10 +1,6 @@
 package com.example.lostpethelper.service.impl;
 
-import com.example.lostpethelper.dto.response.ResponseFromClientDTO;
-import com.example.lostpethelper.dto.response.ResponseToClientDTO;
 import com.example.lostpethelper.exception.ResponseNotFoundException;
-import com.example.lostpethelper.exception.TicketNotFoundException;
-import com.example.lostpethelper.exception.UserNotFoundException;
 import com.example.lostpethelper.mapper.ResponseMapper;
 import com.example.lostpethelper.model.Response;
 import com.example.lostpethelper.model.Ticket;
@@ -13,7 +9,7 @@ import com.example.lostpethelper.repository.ResponseRepository;
 import com.example.lostpethelper.repository.TicketRepository;
 import com.example.lostpethelper.repository.UserRepository;
 import com.example.lostpethelper.service.ResponseService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ResponseServiceImpl implements ResponseService {
 
     private final ResponseRepository responseRepository;
@@ -29,7 +25,7 @@ public class ResponseServiceImpl implements ResponseService {
     private final TicketRepository ticketRepository;
 
     @Override
-    public List<ResponseToClientDTO> findAllResponses() {
+    public List<Response> findAll() {
         List<Response> responses = responseRepository.findAll();
 
         return responses.stream()
@@ -38,7 +34,7 @@ public class ResponseServiceImpl implements ResponseService {
     }
 
     @Override
-    public ResponseToClientDTO findResponseById(Integer id) {
+    public Response find(Integer id) {
         Response response = responseRepository
                 .findById(id)
                 .orElseThrow(() -> new ResponseNotFoundException(id));
@@ -48,11 +44,11 @@ public class ResponseServiceImpl implements ResponseService {
 
     @Override
     @Transactional
-    public ResponseToClientDTO createResponse(ResponseFromClientDTO responseFromClientDTO) {
-        User user = getUserById(responseFromClientDTO);
-        Ticket ticket = getTicketById(responseFromClientDTO);
+    public Response create(Response rq) {
+        User user = getUserById(rq);
+        Ticket ticket = getTicketById(rq);
 
-        Response response = ResponseMapper.mapToResponse(responseFromClientDTO, null, user, ticket); // todo: криво-косо, почитать про MapStruct
+        Response response = ResponseMapper.mapToResponse(rq, null, user, ticket); // todo: криво-косо, почитать про MapStruct
 
         Response createdResponse = responseRepository.save(response);
 
@@ -61,18 +57,18 @@ public class ResponseServiceImpl implements ResponseService {
 
     @Override
     @Transactional
-    public ResponseToClientDTO updateResponseById(Integer id, ResponseFromClientDTO responseFromClientDTO) {
+    public Response update(Integer id, ResponseRq responseRq) {
         Response existingResponse = responseRepository
                 .findById(id)
                 .orElseThrow(() -> new ResponseNotFoundException(id));
-        User user = getUserById(responseFromClientDTO);
-        Ticket ticket = getTicketById(responseFromClientDTO);
+        User user = getUserById(responseRq);
+        Ticket ticket = getTicketById(responseRq);
 
-        existingResponse.setMessage(responseFromClientDTO.message());
+        existingResponse.setMessage(responseRq.message());
         existingResponse.setTicket(ticket);
         existingResponse.setUser(user);
-        existingResponse.setImgURI(responseFromClientDTO.imgURI());
-        existingResponse.setLocation(responseFromClientDTO.location());
+        existingResponse.setImgURI(responseRq.imgURI());
+        existingResponse.setLocation(responseRq.location());
         existingResponse.setCreatedAt(OffsetDateTime.now());
 
         Response updatedResponse = responseRepository.save(existingResponse);
@@ -80,20 +76,8 @@ public class ResponseServiceImpl implements ResponseService {
         return ResponseMapper.mapToResponseToClientDTO(updatedResponse);
     }
 
-    private Ticket getTicketById(ResponseFromClientDTO responseFromClientDTO) {
-        return ticketRepository
-                .findById(responseFromClientDTO.ticketId())
-                .orElseThrow(() -> new TicketNotFoundException(responseFromClientDTO.ticketId()));
-    }
-
-    private User getUserById(ResponseFromClientDTO responseFromClientDTO) {
-        return userRepository
-                .findById(responseFromClientDTO.userId())
-                .orElseThrow(() -> new UserNotFoundException(responseFromClientDTO.userId()));
-    }
-
     @Override
-    public void deleteResponseById(Integer id) {
+    public void delete(Integer id) {
         responseRepository.deleteById(id);
         System.out.printf("Response with id = %d was deleted%n", id);
     }

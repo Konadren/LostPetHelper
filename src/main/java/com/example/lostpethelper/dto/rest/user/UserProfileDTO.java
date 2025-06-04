@@ -1,4 +1,4 @@
-package com.example.lostpethelper.dto.user;
+package com.example.lostpethelper.dto.rest.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

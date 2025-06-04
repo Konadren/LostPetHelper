@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: body">
+<head>
+    <title>Регистрация</title>
+</head>
+<body>
+<h2>Регистрация пользователя</h2>
+<form th:action="@{/ui/register}" th:object="${userForm}" method="post" class="row g-3">
+    <div class="col-md-6">
+        <label class="form-label">Имя</label>
+        <input class="form-control" th:field="*{name}" required/>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Фамилия</label>
+        <input class="form-control" th:field="*{lastname}" required/>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Телефон</label>
+        <input class="form-control" th:field="*{phoneNumber}" required/>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input class="form-control" th:field="*{email}" required/>
+    </div>
+    <div class="col-12">
+        <button class="btn btn-success" type="submit">Зарегистрировать</button>
+    </div>
+</form>
+</body>
+</html>

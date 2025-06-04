@@ -1,18 +1,19 @@
 package com.example.lostpethelper.service;
 
-import com.example.lostpethelper.dto.user.UserDTO;
-import com.example.lostpethelper.dto.user.UserProfileDTO;
+import com.example.lostpethelper.dto.rest.user.UserRs;
+import com.example.lostpethelper.dto.rest.user.UserProfileDTO;
 
 import java.util.List;
 
 public interface UserService {
-    List<UserDTO> findAllUsers();
 
-    UserDTO findUserById(Integer id);
+    List<UserRs> findAll();
 
-    UserProfileDTO createUser(UserProfileDTO user);
+    UserRs find(Integer id);
 
-    UserProfileDTO updateUserById(Integer id, UserProfileDTO userDTO);
+    UserProfileDTO create(UserProfileDTO user);
 
-    void deleteUserById(Integer id);
+    UserProfileDTO update(Integer id, UserProfileDTO userDTO);
+
+    void delete(Integer id);
 }

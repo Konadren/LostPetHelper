@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: body">
+<head>
+    <title>Users</title>
+</head>
+<body>
+<h2>Список пользователей</h2>
+<a class="btn btn-primary mb-3" href="/ui/register">Регистрация нового</a>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Телефон</th>
+        <th>Email</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.lastname}"></td>
+        <td th:text="${user.phoneNumber}"></td>
+        <td th:text="${user.email}"></td>
+        <td>
+            <form th:action="@{|/ui/users/${user.id}/remove|}" method="post">
+                <button class="btn btn-sm btn-danger">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

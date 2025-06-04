@@ -1,14 +1,14 @@
 package com.example.lostpethelper.mapper;
 
-import com.example.lostpethelper.dto.UserRoleDTO;
+import com.example.lostpethelper.dto.rest.role.UserRoleRs;
 import com.example.lostpethelper.model.UserRole;
 
 public class UserRoleMapper {
-    public static UserRoleDTO mapToUserRoleDTO(UserRole userRole) {
-        return new UserRoleDTO(userRole.getRoleName());
+    public static UserRoleRs mapToUserRoleDTO(UserRole userRole) {
+        return new UserRoleRs(userRole.getRoleName());
     }
 
-    public static UserRole mapToUserRole(UserRoleDTO userRoleDTO, Integer id) {
-        return new UserRole(id, userRoleDTO.roleName());
+    public static UserRole mapToUserRole(UserRoleRs userRoleRs, Integer id) {
+        return new UserRole(id, userRoleRs.roleName());
     }
 }

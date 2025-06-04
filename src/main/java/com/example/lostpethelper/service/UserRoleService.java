@@ -1,18 +1,18 @@
 package com.example.lostpethelper.service;
 
-import com.example.lostpethelper.dto.UserRoleDTO;
+import com.example.lostpethelper.dto.rest.role.UserRoleRs;
 
 import java.util.List;
 
 public interface UserRoleService {
 
-    UserRoleDTO createUserRole(UserRoleDTO userRoleDTO);
+    UserRoleRs create(UserRoleRs userRoleRs);
 
-    List<UserRoleDTO> findAllUserRoles();
+    List<UserRoleRs> findAll();
 
-    UserRoleDTO findUserRoleById(Integer id);
+    UserRoleRs get(Integer id);
 
-    UserRoleDTO updateUserRoleById(Integer id, UserRoleDTO userRoleDTO);
+    UserRoleRs update(Integer id, UserRoleRs userRoleRs);
 
-    void deleteUserRoleById(Integer id);
+    void delete(Integer id);
 }

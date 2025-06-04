@@ -1,15 +1,15 @@
 package com.example.lostpethelper.mapper;
 
-import com.example.lostpethelper.dto.user.UserDTO;
-import com.example.lostpethelper.dto.user.UserProfileDTO;
+import com.example.lostpethelper.dto.rest.user.UserRs;
+import com.example.lostpethelper.dto.rest.user.UserProfileDTO;
 import com.example.lostpethelper.model.User;
 
 import java.util.List;
 
 public class UserMapper {
 
-    public static UserDTO mapToUserDTO(User user) {
-        return new UserDTO(
+    public static UserRs mapToUserDTO(User user) {
+        return new UserRs(
                 user.getName(),
                 user.getLastname(),
                 user.getPhoneNumber(),

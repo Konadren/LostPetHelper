@@ -1,25 +1,35 @@
 package com.example.lostpethelper.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
-
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder(toBuilder = true)
 @Entity
-@Table(name = "tickets")
+@Table
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ticket_id")
+    @Column(nullable = false)
     private Integer ticketID;
 
     @ManyToOne
@@ -27,27 +37,24 @@ public class Ticket {
     private User user;
 
     @Column(name = "ticket_type")
-    // should be LOST or FOUND
     private String ticketType;
 
-    @Column(name = "pet_name")
+    @Column(nullable = false)
     private String petName;
 
-    @Column(name = "description")
+    @Column(nullable = false)
     private String description;
 
-    @Column(name = "location")
+    @Column(nullable = false)
     private String location;
 
-    @Column(name = "img_uri")
+    @Column(nullable = false)
     private String imgURI;
 
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt = OffsetDateTime.now();
+    @Column(nullable = false)
+    private OffsetDateTime createdAt;
 
-    //todo: private List<Response> responses, one-to-many
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@OnDelete(action = OnDeleteAction.CASCADE)
     private List<Response> responses;
 
 

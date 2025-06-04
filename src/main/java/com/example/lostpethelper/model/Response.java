@@ -2,34 +2,39 @@ package com.example.lostpethelper.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder(toBuilder = true)
 @Entity
-@Table(name = "responses")
+@Table
 public class Response {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "response_id")
-    private Integer responseID;
+    @Column(nullable = false)
+    private Integer id;
 
-    @Column(name = "message")
+    @Column(nullable = false)
     private String message;
 
-    @Column(name = "location")
+    @Column(nullable = false)
     private String location;
 
-    @Column(name = "img_uri")
+    @Column(nullable = false)
     private String imgURI;
 
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt = OffsetDateTime.now();
+    @Column(nullable = false)
+    private OffsetDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
