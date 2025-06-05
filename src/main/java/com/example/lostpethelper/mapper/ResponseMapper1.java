@@ -7,7 +7,7 @@ import com.example.lostpethelper.model.User;
 
 import java.time.OffsetDateTime;
 
-public class ResponseMapper {
+public class ResponseMapper1 {
     public static ResponseToClientDTO mapToResponseToClientDTO(Response response) {
         return new ResponseToClientDTO(
                 response.getMessage(),

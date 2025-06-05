@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @RequestMapping("api/v1/tickets")
 public interface TicketController {
 
@@ -28,7 +30,7 @@ public interface TicketController {
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    TicketRs getAll();
+    List<TicketRs> getAll();
 
     @PostMapping("/{id}/remove")
     void delete(@PathVariable String id);

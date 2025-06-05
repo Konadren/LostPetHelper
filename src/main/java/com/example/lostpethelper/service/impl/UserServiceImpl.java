@@ -3,7 +3,7 @@ package com.example.lostpethelper.service.impl;
 import com.example.lostpethelper.dto.rest.user.UserProfileDTO;
 import com.example.lostpethelper.dto.rest.user.UserRs;
 import com.example.lostpethelper.exception.UserNotFoundException;
-import com.example.lostpethelper.mapper.UserMapper;
+import com.example.lostpethelper.mapper.UserMapper1;
 import com.example.lostpethelper.model.User;
 import com.example.lostpethelper.repository.UserRepository;
 import com.example.lostpethelper.service.UserService;
@@ -23,12 +23,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileDTO create(UserProfileDTO userDTO) {
-        User user = UserMapper.mapToUser(userDTO, null); // криво-косо, почитать про MapStruct
+        User user = UserMapper1.mapToUser(userDTO, null); // криво-косо, почитать про MapStruct
         user.setPassword(passwordEncoder.encode(userDTO.password()));
 
         User savedUser = userRepository.save(user);
 
-        return UserMapper.mapToUserProfileDTO(savedUser);
+        return UserMapper1.mapToUserProfileDTO(savedUser);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
                 .findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        return UserMapper.mapToUserDTO(user);
+        return UserMapper1.mapToUserDTO(user);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepository.save(existingUser);
 
-        return UserMapper.mapToUserProfileDTO(updatedUser);
+        return UserMapper1.mapToUserProfileDTO(updatedUser);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAll();
 
         return users.stream()
-                .map(UserMapper::mapToUserDTO)
+                .map(UserMapper1::mapToUserDTO)
                 .toList();
     }
 }

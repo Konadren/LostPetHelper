@@ -1,14 +1,10 @@
 package com.example.lostpethelper.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,8 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,15 +24,10 @@ import java.util.List;
 @Table
 public class Ticket {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
     @Column(nullable = false)
-    private Integer ticketID;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @Column(name = "ticket_type")
     private String ticketType;
 
     @Column(nullable = false)
@@ -52,10 +43,7 @@ public class Ticket {
     private String imgURI;
 
     @Column(nullable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Response> responses;
-
-
+    private UUID userId;
 }

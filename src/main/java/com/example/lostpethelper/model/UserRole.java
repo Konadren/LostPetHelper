@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 
 @Getter
 @Setter
@@ -20,9 +22,8 @@ import lombok.Setter;
 @Table
 public class UserRole {
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private UUID id;
 
     @Column
     private String name;

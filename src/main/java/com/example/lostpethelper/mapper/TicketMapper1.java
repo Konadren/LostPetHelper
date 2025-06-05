@@ -1,6 +1,5 @@
 package com.example.lostpethelper.mapper;
 
-import com.example.lostpethelper.dto.response.ResponseToClientDTO;
 import com.example.lostpethelper.dto.rest.ticket.TicketRq;
 import com.example.lostpethelper.dto.rest.ticket.TicketRs;
 import com.example.lostpethelper.model.Ticket;
@@ -9,7 +8,7 @@ import com.example.lostpethelper.model.User;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public class TicketMapper {
+public class TicketMapper1 {
     public static TicketRs mapToTicketDTO(Ticket ticket) {
         return new TicketRs(
                 ticket.getUser().getUserID(),

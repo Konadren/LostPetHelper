@@ -4,11 +4,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 public record TicketRs(
         @NotNull(message = "User ID from ticket can`t be empty")
-        Integer userID,
-        @NotNull(message = "Ticket shouldn`t be empty") //todo: иной подход к тикету сделать
+        UUID id,
+        @NotNull(message = "Ticket shouldn`t be empty")
         String ticketType,
         @NotNull(message = "Pet name should`t be empty")
         @Size(min = 3, max = 20, message = "Name should be between 3 and 20")

@@ -6,7 +6,7 @@ import com.example.lostpethelper.model.User;
 
 import java.util.List;
 
-public class UserMapper {
+public class UserMapper1 {
 
     public static UserRs mapToUserDTO(User user) {
         return new UserRs(

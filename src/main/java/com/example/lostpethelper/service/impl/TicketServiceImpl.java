@@ -4,7 +4,7 @@ import com.example.lostpethelper.dto.rest.ticket.TicketRq;
 import com.example.lostpethelper.dto.rest.ticket.TicketRs;
 import com.example.lostpethelper.exception.TicketNotFoundException;
 import com.example.lostpethelper.exception.UserNotFoundException;
-import com.example.lostpethelper.mapper.TicketMapper;
+import com.example.lostpethelper.mapper.TicketMapper1;
 import com.example.lostpethelper.model.Ticket;
 import com.example.lostpethelper.model.User;
 import com.example.lostpethelper.repository.TicketRepository;
@@ -19,6 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService {
+
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
 
@@ -26,11 +27,11 @@ public class TicketServiceImpl implements TicketService {
     public TicketRs create(TicketRq ticketRq) {
 
         User user = getUserById(ticketRq);
-        Ticket ticket = TicketMapper.mapToTicket(ticketRq, null, user);
+        Ticket ticket = TicketMapper1.mapToTicket(ticketRq, null, user);
 
         Ticket savedTicket = ticketRepository.save(ticket);
 
-        return TicketMapper.mapToTicketDTO(savedTicket);
+        return TicketMapper1.mapToTicketDTO(savedTicket);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class TicketServiceImpl implements TicketService {
         List<Ticket> tickets = ticketRepository.findAll();
 
         return tickets.stream()
-                .map(TicketMapper::mapToTicketDTO)
+                .map(TicketMapper1::mapToTicketDTO)
                 .toList();
     }
 
@@ -48,7 +49,7 @@ public class TicketServiceImpl implements TicketService {
                 .findById(id)
                 .orElseThrow(() -> new TicketNotFoundException(id));
 
-        return TicketMapper.mapToTicketDTO(ticket);
+        return TicketMapper1.mapToTicketDTO(ticket);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class TicketServiceImpl implements TicketService {
 
         Ticket updatedTicket = ticketRepository.save(existingTicket);
 
-        return TicketMapper.mapToTicketDTO(updatedTicket);
+        return TicketMapper1.mapToTicketDTO(updatedTicket);
     }
 
     @Override
